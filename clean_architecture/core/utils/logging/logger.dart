@@ -1,6 +1,3 @@
-#!/bin/bash
-
-cat << 'EOF' > lib/utils/logging/logger.dart
 import 'dart:developer' as developer;
 
 class AppLogger {
@@ -20,6 +17,3 @@ class AppLogger {
     developer.log(message, name: 'ERROR', error: error, stackTrace: stack);
   }
 }
-EOF
-
-echo "🎉 AppLogger created at lib/utils/logging/logger.dart"

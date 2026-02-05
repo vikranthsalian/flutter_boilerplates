@@ -16,23 +16,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # State Management
-  provider: ^6.0.5
-
-  # Networking
-  dio: ^5.4.0
-
-  # Local Storage
-  shared_preferences: ^2.2.2
-
-  # JSON / Model Utils
-  json_annotation: ^4.9.0
-
-  # Localization
-  flutter_localizations:
-    sdk: flutter
-  intl: ^0.18.1
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
