@@ -18,7 +18,7 @@ else
 fi
 
 
-BASE_URL="https://raw.githubusercontent.com/vikranthsalian/flutter_boilerplates/main/scripts/featute_arch_script/sub_scripts"
+BASE_URL="https://raw.githubusercontent.com/vikranthsalian/flutter_boilerplates/main/scripts/feature_arch_script/sub_scripts"
 
 run_script () {
   local name="$1"
