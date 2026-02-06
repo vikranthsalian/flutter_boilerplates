@@ -50,5 +50,7 @@ run_script create_login.sh
 run_script create_signup.sh
 run_script create_forgot_password.sh
 run_script create_reset_password.sh
+run_script create_auth_social.sh
+run_script create_auth_service.sh
 
 echo "🎉 Folder structure created successfully!"
