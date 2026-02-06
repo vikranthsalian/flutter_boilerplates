@@ -6,7 +6,7 @@ PROJECT_ROOT="$(pwd)"
 
 ENV_FILE="$PROJECT_ROOT/.env"
 # Paths
-export $(grep -v '^#' ../../.env | xargs)
+export $(grep -v '^#' $ENV_FILE | xargs)
 
 if [ -f "$ENV_FILE" ]; then
   echo "📦 Loading .env from project root"
