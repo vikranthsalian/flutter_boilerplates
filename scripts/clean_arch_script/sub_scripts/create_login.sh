@@ -106,7 +106,6 @@ EOF
 # DATA – Remote Datasource
 ###############################################################################
 cat << 'EOF' > $BASE_DIR/data/datasources/login_remote_datasource.dart
-import '../../../../../utils/firebase/crashlytics_service.dart';
 import '../../../../../core/network/dio_client.dart';
 import '../models/login_response_model.dart';
 
@@ -130,7 +129,6 @@ class LoginRemoteDatasource {
 
       return LoginResponseModel.fromJson(response.data!);
     } catch (e, s) {
-      CrashlyticsService.recordError(e, s);
       rethrow;
     }
   }
