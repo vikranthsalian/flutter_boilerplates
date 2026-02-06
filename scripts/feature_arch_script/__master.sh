@@ -18,7 +18,7 @@ else
 fi
 
 
-BASE_URL="https://raw.githubusercontent.com/vikranthsalian/flutter_boilerplates/main/scripts/clean_arch_script/sub_scripts"
+BASE_URL="https://raw.githubusercontent.com/vikranthsalian/flutter_boilerplates/main/scripts/featute_arch_script/sub_scripts"
 
 run_script () {
   local name="$1"
@@ -27,7 +27,7 @@ run_script () {
 }
 
 
-echo "▶️ Running clean architecture setup..."
+echo "▶️ Running Feature architecture setup..."
 #bash create_pubsec.sh
 
 run_script create_constants.sh
