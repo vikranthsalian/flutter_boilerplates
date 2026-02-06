@@ -2,9 +2,25 @@
 set -e
 echo "📁 Creating Flutter folder structure..."
 
+PROJECT_ROOT="$(pwd)"
+
+ENV_FILE="$PROJECT_ROOT/.env"
 # Paths
 export $(grep -v '^#' ../../.env | xargs)
+
+if [ -f "$ENV_FILE" ]; then
+  echo "📦 Loading .env from project root"
+  set -a
+  source "$ENV_FILE"
+  set +a
+else
+  echo "ℹ️ No .env found in project root, continuing..."
+fi
+
+
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 cd "$SCRIPT_DIR/sub_scripts"
 echo "✅ Now inside sub_scripts:"
 pwd
