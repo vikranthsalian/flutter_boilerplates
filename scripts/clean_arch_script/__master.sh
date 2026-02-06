@@ -32,6 +32,7 @@ echo "▶️ Running clean architecture setup..."
 
 run_script create_constants.sh
 run_script create_dio.sh
+run_script create_go_router.sh
 run_script create_env.sh
 run_script create_extensions.sh
 run_script create_file_picker.sh
