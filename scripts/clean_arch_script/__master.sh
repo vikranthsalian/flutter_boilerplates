@@ -18,44 +18,34 @@ else
 fi
 
 
-# 2️⃣ Clone boilerplates repo
-TOOLS_DIR="$PROJECT_ROOT/.flutter_boilerplates"
+BASE_URL="https://raw.githubusercontent.com/vikranthsalian/flutter_boilerplates/main/scripts/clean_arch_script/sub_scripts"
 
-if [ ! -d "$TOOLS_DIR" ]; then
-  echo "⬇️ Cloning Flutter Boilerplates repo..."
-  git clone https://github.com/vikranthsalian/flutter_boilerplates.git "$TOOLS_DIR"
-else
-  echo "✅ Flutter Boilerplates already present"
-fi
+run_script () {
+  local name="$1"
+  echo "▶️ Running $name"
+  curl -fsSL "$BASE_URL/$name" | bash
+}
 
-# 3️⃣ Run scripts FROM THE CLONED REPO
-SCRIPTS_DIR="$TOOLS_DIR/scripts/clean_arch_script"
-
-if [ ! -d "$SCRIPTS_DIR/sub_scripts" ]; then
-  echo "❌ sub_scripts not found in cloned repo"
-  echo "   Expected: $SCRIPTS_DIR/sub_scripts"
-  exit 1
-fi
 
 echo "▶️ Running clean architecture setup..."
 cd "$SCRIPTS_DIR/sub_scripts"
 #bash create_pubsec.sh
 
-bash create_constants.sh
-bash create_dio.sh
-bash create_env.sh
-bash create_extensions.sh
-bash create_file_picker.sh
-bash create_image_picker.sh
-bash create_logger.sh
-bash create_secure_storage.sh
-bash create_share_plus.sh
-bash create_shared_prefs.sh
-bash create_theme.sh
-bash create_validators.sh
+run_script create_constants.sh
+# bash create_dio.sh
+# bash create_env.sh
+# bash create_extensions.sh
+# bash create_file_picker.sh
+# bash create_image_picker.sh
+# bash create_logger.sh
+# bash create_secure_storage.sh
+# bash create_share_plus.sh
+# bash create_shared_prefs.sh
+# bash create_theme.sh
+# bash create_validators.sh
 
 
-bash create_firebase_analytics.sh
-bash create_feature.sh
+# bash create_firebase_analytics.sh
+# bash create_feature.sh
 
 echo "🎉 Folder structure created successfully!"
