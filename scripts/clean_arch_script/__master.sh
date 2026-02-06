@@ -18,13 +18,27 @@ else
 fi
 
 
+# 2️⃣ Clone boilerplates repo
+TOOLS_DIR="$PROJECT_ROOT/.flutter_boilerplates"
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ ! -d "$TOOLS_DIR" ]; then
+  echo "⬇️ Cloning Flutter Boilerplates repo..."
+  git clone https://github.com/vikranthsalian/flutter_boilerplates.git "$TOOLS_DIR"
+else
+  echo "✅ Flutter Boilerplates already present"
+fi
 
-cd "$SCRIPT_DIR/sub_scripts"
-echo "✅ Now inside sub_scripts:"
-pwd
+# 3️⃣ Run scripts FROM THE CLONED REPO
+SCRIPTS_DIR="$TOOLS_DIR/scripts/clean_arch_script"
 
+if [ ! -d "$SCRIPTS_DIR/sub_scripts" ]; then
+  echo "❌ sub_scripts not found in cloned repo"
+  echo "   Expected: $SCRIPTS_DIR/sub_scripts"
+  exit 1
+fi
+
+echo "▶️ Running clean architecture setup..."
+cd "$SCRIPTS_DIR/sub_scripts"
 #bash create_pubsec.sh
 
 bash create_constants.sh
