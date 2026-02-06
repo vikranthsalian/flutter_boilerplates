@@ -31,20 +31,20 @@ echo "▶️ Running clean architecture setup..."
 #bash create_pubsec.sh
 
 run_script create_constants.sh
-# bash create_dio.sh
-# bash create_env.sh
-# bash create_extensions.sh
-# bash create_file_picker.sh
-# bash create_image_picker.sh
-# bash create_logger.sh
-# bash create_secure_storage.sh
-# bash create_share_plus.sh
-# bash create_shared_prefs.sh
-# bash create_theme.sh
-# bash create_validators.sh
+bash create_dio.sh
+bash create_env.sh
+bash create_extensions.sh
+bash create_file_picker.sh
+bash create_image_picker.sh
+bash create_logger.sh
+bash create_secure_storage.sh
+bash create_share_plus.sh
+bash create_shared_prefs.sh
+bash create_theme.sh
+bash create_validators.sh
 
 
-# bash create_firebase_analytics.sh
-# bash create_feature.sh
+bash create_firebase_analytics.sh
+bash create_feature.sh
 
 echo "🎉 Folder structure created successfully!"
