@@ -28,7 +28,6 @@ run_script () {
 
 
 echo "▶️ Running clean architecture setup..."
-cd "$SCRIPTS_DIR/sub_scripts"
 #bash create_pubsec.sh
 
 run_script create_constants.sh
