@@ -46,6 +46,6 @@ run_script create_validators.sh
 
 
 run_script create_firebase_analytics.sh
-run_script create_feature.sh
+run_script create_login.sh
 
 echo "🎉 Folder structure created successfully!"
