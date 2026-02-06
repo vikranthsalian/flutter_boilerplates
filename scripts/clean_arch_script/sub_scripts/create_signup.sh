@@ -52,7 +52,6 @@ EOF
 ###############################################################################
 cat << 'EOF' > "$FEATURE_DIR/domain/usecases/signup_usecase.dart"
 import '../../../../../core/utils/firebase/analytics_service.dart';
-import '../../../../../core/network/tokens/token_manager.dart';
 import '../repositories/signup_repository.dart';
 
 class SignupUseCase {
@@ -71,10 +70,6 @@ class SignupUseCase {
       password: password,
     );
 
-    await TokenManager.saveTokens(
-      result.accessToken,
-      result.refreshToken,
-    );
 
     AnalyticsService.logEvent(
       'signup_success',
