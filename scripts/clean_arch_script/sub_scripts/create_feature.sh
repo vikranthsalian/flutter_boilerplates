@@ -53,12 +53,10 @@ mkdir -p \
 ###############################################################################
 cat << EOF > $BASE_DIR/domain/entities/${FEATURE_NAME}_entity.dart
 class ${CLASS_NAME}Entity {
-  final String accessToken;
-  final String refreshToken;
+  final String entityVariable;
 
   const ${CLASS_NAME}Entity({
-    required this.accessToken,
-    required this.refreshToken,
+    required this.entityVariable,
   });
 }
 EOF
@@ -71,8 +69,7 @@ import '../entities/${FEATURE_NAME}_entity.dart';
 
 abstract class ${CLASS_NAME}Repository {
   Future<${CLASS_NAME}Entity> execute({
-    required String email,
-    required String password,
+    required String entityVariable
   });
 }
 EOF
@@ -91,23 +88,20 @@ class ${CLASS_NAME}UseCase {
   ${CLASS_NAME}UseCase(this.repository);
 
   Future<void> execute({
-    required String email,
-    required String password,
+    required String entityVariable
   }) async {
     final result = await repository.execute(
-      email: email,
-      password: password,
+      key: entityVariable,
     );
 
     await TokenManager.saveTokens(
-      result.accessToken,
-      result.refreshToken,
+      result.entityVariable
     );
 
     AnalyticsService.logEvent(
       '${FEATURE_NAME}_success',
       parameters: {
-        'email': email,
+        'key': entityVariable,
       },
     );
   }
@@ -119,18 +113,15 @@ EOF
 ###############################################################################
 cat << EOF > $BASE_DIR/data/models/${FEATURE_NAME}_response_model.dart
 class ${CLASS_NAME}ResponseModel {
-  final String accessToken;
-  final String refreshToken;
+  final String modelVariable;
 
   ${CLASS_NAME}ResponseModel({
-    required this.accessToken,
-    required this.refreshToken,
+    required this.modelVariable
   });
 
   factory ${CLASS_NAME}ResponseModel.fromJson(Map<String, dynamic> json) {
     return ${CLASS_NAME}ResponseModel(
-      accessToken: json['accessToken'] as String,
-      refreshToken: json['refreshToken'] as String,
+      modelVariable: json['modelVariable'] as String
     );
   }
 }
@@ -150,15 +141,13 @@ class ${CLASS_NAME}RemoteDatasource {
   ${CLASS_NAME}RemoteDatasource(this.dio);
 
   Future<${CLASS_NAME}ResponseModel> execute({
-    required String email,
-    required String password,
+    required String datasourceVariable
   }) async {
     try {
       final response = await dio.post<Map<String, dynamic>>(
         '/auth/$API_NAME',
         data: {
-          'email': email,
-          'password': password,
+          'key': datasourceVariable
         },
       );
 
@@ -186,17 +175,14 @@ class ${CLASS_NAME}RepositoryImpl implements ${CLASS_NAME}Repository {
 
   @override
   Future<${CLASS_NAME}Entity> execute({
-    required String email,
-    required String password,
+    required String entityVariable,
   }) async {
     final result = await remote.execute(
-      email: email,
-      password: password,
+      key: entityVariable,
     );
 
     return ${CLASS_NAME}Entity(
-      accessToken: result.accessToken,
-      refreshToken: result.refreshToken,
+      accessToken: result.entityVariable,
     );
   }
 }
@@ -209,9 +195,6 @@ cat << EOF > $BASE_DIR/presentation/pages/${FEATURE_NAME}_page.dart
 import 'package:flutter/material.dart';
 import '../../../../../core/core/network/dio_client.dart';
 import '../../../../../core/utils/logging/logger.dart';
-import '../../../../../core/utils/validators/auth_validators.dart';
-import '../../../../../core/utils/validators/string_validators.dart';
-import '../../../../../core/utils/validators/validator_extensions.dart';
 import '../../domain/usecases/${FEATURE_NAME}_usecase.dart';
 import '../../data/datasources/${FEATURE_NAME}_remote_datasource.dart';
 import '../../data/repositories/${FEATURE_NAME}_repository_impl.dart';
@@ -224,9 +207,7 @@ class ${CLASS_NAME}Page extends StatefulWidget {
 }
 
 class _${CLASS_NAME}PageState extends State<${CLASS_NAME}Page> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailCtrl = TextEditingController();
-  final _passwordCtrl = TextEditingController();
+
 
   late final ${CLASS_NAME}UseCase _useCase;
 
@@ -242,64 +223,13 @@ class _${CLASS_NAME}PageState extends State<${CLASS_NAME}Page> {
   }
 
   Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    try {
-      await _useCase.execute(
-        email: _emailCtrl.text.trim(),
-        password: _passwordCtrl.text,
-      );
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$CLASS_NAME successful')),
-      );
-    } catch (e) {
-      AppLogger.e('$CLASS_NAME failed', e);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$CLASS_NAME failed')),
-      );
-    }
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('$CLASS_NAME')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _emailCtrl,
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (v) => [
-                  (val) => StringValidators.required(val),
-                  (val) => AuthValidators.email(val),
-                ].validate(v),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordCtrl,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'Password'),
-                validator: (v) => [
-                  (val) => StringValidators.required(val),
-                  (val) => AuthValidators.password(val),
-                ].validate(v),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _submit,
-                child: Text('$CLASS_NAME'),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
