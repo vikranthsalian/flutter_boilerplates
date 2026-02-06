@@ -172,10 +172,10 @@ EOF
 cat << 'EOF' > $BASE_DIR/presentation/pages/login_page.dart
 import 'package:flutter/material.dart';
 import '../../../../../core/network/dio_client.dart';
-import '../../../../../utils/logging/logger.dart';
-import '../../../../../utils/validators/auth_validators.dart';
-import '../../../../../utils/validators/string_validators.dart';
-import '../../../../../utils/validators/validator_extensions.dart';
+import '../../../../../core/utils/logging/logger.dart';
+import '../../../../../core/utils/validators/auth_validators.dart';
+import '../../../../../core/utils/validators/string_validators.dart';
+import '../../../../../core/utils/validators/validator_extensions.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../data/datasources/login_remote_datasource.dart';
 import '../../data/repositories/login_repository_impl.dart';
