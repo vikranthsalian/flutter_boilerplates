@@ -92,7 +92,6 @@ echo "✅ go_router setup completed."
 ###############################################################################
 cat << 'EOF' > $BASE_DIR/core/routes/app_route_observer.dart
 import '../utils/firebase/analytics_service.dart';
-import '../utils/firebase/crashlytics_service.dart';
 import '../utils/logging/logger.dart';
 import 'package:flutter/material.dart';
 /// Global route observer for the app.
@@ -123,7 +122,6 @@ class AppRouteObserver extends NavigatorObserver {
 
     AppLogger.i('Navigation $action → $routeName');
     AnalyticsService.logScreen(routeName);
-    CrashlyticsService.log('NAV_$action: $routeName');
   }
 }
 EOF
