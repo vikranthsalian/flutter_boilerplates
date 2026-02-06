@@ -3,7 +3,7 @@ set -e
 echo "📁 Creating Flutter folder structure..."
 
 PROJECT_ROOT="$(pwd)"
-
+echo PROJECT_ROOT
 ENV_FILE="$PROJECT_ROOT/.env"
 # Paths
 export $(grep -v '^#' $ENV_FILE | xargs)
