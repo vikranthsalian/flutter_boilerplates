@@ -193,7 +193,6 @@ EOF
 ###############################################################################
 cat << EOF > $BASE_DIR/presentation/pages/${FEATURE_NAME}_page.dart
 import 'package:flutter/material.dart';
-import '../../../../../core/network/dio_client.dart';
 import '../../../../../core/utils/logging/logger.dart';
 import '../../domain/usecases/${FEATURE_NAME}_usecase.dart';
 import '../../data/datasources/${FEATURE_NAME}_remote_datasource.dart';
