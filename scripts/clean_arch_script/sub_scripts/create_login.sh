@@ -47,7 +47,7 @@ EOF
 # DOMAIN – UseCase
 ###############################################################################
 cat << 'EOF' > $BASE_DIR/domain/usecases/login_usecase.dart
-import '../../../../../utils/firebase/analytics_service.dart';
+import '../../../../../core/utils/firebase/analytics_service.dart';
 import '../../../../../core/network/tokens/token_manager.dart';
 import '../repositories/login_repository.dart';
 
