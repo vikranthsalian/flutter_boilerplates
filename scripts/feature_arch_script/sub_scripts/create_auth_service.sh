@@ -1,45 +1,83 @@
 #!/bin/bash
 set -e
 
-echo "🔐 Creating AuthService..."
+echo "🔐 Creating AuthService (No DI, Manual Composition)..."
 
 : "${BASE_DIR:?BASE_DIR is not set}"
 
 AUTH_DIR="$BASE_DIR/core/auth"
 mkdir -p "$AUTH_DIR"
 
-###############################################################################
-# AuthService
-###############################################################################
 cat << 'EOF' > "$AUTH_DIR/auth_service.dart"
+import '../network/dio_client.dart';
 import '../network/tokens/token_manager.dart';
 
+// ---------------- LOGIN ----------------
+import '../../features/auth/login/data/datasources/login_remote_datasource.dart';
+import '../../features/auth/login/data/repositories/login_repository_impl.dart';
 import '../../features/auth/login/domain/usecases/login_usecase.dart';
+
+// ---------------- SIGNUP ----------------
+import '../../features/auth/signup/data/datasources/signup_remote_datasource.dart';
+import '../../features/auth/signup/data/repositories/signup_repository_impl.dart';
 import '../../features/auth/signup/domain/usecases/signup_usecase.dart';
+
+// ---------------- SOCIAL AUTH ----------------
+import '../../features/auth/social_auth/data/datasources/social_auth_remote_datasource.dart';
+import '../../features/auth/social_auth/data/repositories/social_auth_repository_impl.dart';
 import '../../features/auth/social_auth/domain/usecases/social_auth_usecase.dart';
+
+// ---------------- FORGOT PASSWORD ----------------
+import '../../features/auth/forgot_password/data/datasources/forgot_password_remote_datasource.dart';
+import '../../features/auth/forgot_password/data/repositories/forgot_password_repository_impl.dart';
 import '../../features/auth/forgot_password/domain/usecases/forgot_password_usecase.dart';
+
+// ---------------- RESET PASSWORD ----------------
+import '../../features/auth/reset_password/data/datasources/reset_password_remote_datasource.dart';
+import '../../features/auth/reset_password/data/repositories/reset_password_repository_impl.dart';
 import '../../features/auth/reset_password/domain/usecases/reset_password_usecase.dart';
 
-/// AuthService is a facade over all auth-related use cases.
-/// UI or higher layers should ONLY talk to this class.
+/// AuthService acts as a facade over all auth use cases.
+/// No DI container required. Manual composition.
 class AuthService {
-  final LoginUseCase _loginUseCase;
-  final SignupUseCase _signupUseCase;
-  final SocialAuthUseCase _socialAuthUseCase;
-  final ForgotPasswordUseCase _forgotPasswordUseCase;
-  final ResetPasswordUseCase _resetPasswordUseCase;
+  late final LoginUseCase _loginUseCase;
+  late final SignupUseCase _signupUseCase;
+  late final SocialAuthUseCase _socialAuthUseCase;
+  late final ForgotPasswordUseCase _forgotPasswordUseCase;
+  late final ResetPasswordUseCase _resetPasswordUseCase;
 
-  AuthService({
-    required LoginUseCase loginUseCase,
-    required SignupUseCase signupUseCase,
-    required SocialAuthUseCase socialAuthUseCase,
-    required ForgotPasswordUseCase forgotPasswordUseCase,
-    required ResetPasswordUseCase resetPasswordUseCase,
-  })  : _loginUseCase = loginUseCase,
-        _signupUseCase = signupUseCase,
-        _socialAuthUseCase = socialAuthUseCase,
-        _forgotPasswordUseCase = forgotPasswordUseCase,
-        _resetPasswordUseCase = resetPasswordUseCase;
+  AuthService() {
+    _init();
+  }
+
+  void _init() {
+    final dio = DioClient();
+
+    // ---------------- LOGIN ----------------
+    final loginRemote = LoginRemoteDatasource(dio);
+    final loginRepo = LoginRepositoryImpl(loginRemote);
+    _loginUseCase = LoginUseCase(loginRepo);
+
+    // ---------------- SIGNUP ----------------
+    final signupRemote = SignupRemoteDatasource(dio);
+    final signupRepo = SignupRepositoryImpl(signupRemote);
+    _signupUseCase = SignupUseCase(signupRepo);
+
+    // ---------------- SOCIAL AUTH ----------------
+    final socialRemote = SocialAuthRemoteDatasource(dio);
+    final socialRepo = SocialAuthRepositoryImpl(socialRemote);
+    _socialAuthUseCase = SocialAuthUseCase(socialRepo);
+
+    // ---------------- FORGOT PASSWORD ----------------
+    final forgotRemote = ForgotPasswordRemoteDatasource(dio);
+    final forgotRepo = ForgotPasswordRepositoryImpl(forgotRemote);
+    _forgotPasswordUseCase = ForgotPasswordUseCase(forgotRepo);
+
+    // ---------------- RESET PASSWORD ----------------
+    final resetRemote = ResetPasswordRemoteDatasource(dio);
+    final resetRepo = ResetPasswordRepositoryImpl(resetRemote);
+    _resetPasswordUseCase = ResetPasswordUseCase(resetRepo);
+  }
 
   // ---------------------------------------------------------------------------
   // AUTH STATUS
@@ -51,7 +89,7 @@ class AuthService {
   }
 
   // ---------------------------------------------------------------------------
-  // LOGIN / SIGNUP
+  // LOGIN
   // ---------------------------------------------------------------------------
 
   Future<void> login({
@@ -63,6 +101,10 @@ class AuthService {
       password: password,
     );
   }
+
+  // ---------------------------------------------------------------------------
+  // SIGNUP
+  // ---------------------------------------------------------------------------
 
   Future<void> signup({
     required String name,
@@ -76,7 +118,11 @@ class AuthService {
     );
   }
 
-  /// Returns true if this is a new user (for onboarding)
+  // ---------------------------------------------------------------------------
+  // SOCIAL LOGIN
+  // ---------------------------------------------------------------------------
+
+  /// Returns true if user is new (for onboarding)
   Future<bool> socialLogin({
     required String provider,
     required String providerAccessToken,
@@ -88,7 +134,7 @@ class AuthService {
   }
 
   // ---------------------------------------------------------------------------
-  // PASSWORD FLOWS
+  // FORGOT PASSWORD
   // ---------------------------------------------------------------------------
 
   Future<void> forgotPassword({
@@ -96,6 +142,10 @@ class AuthService {
   }) {
     return _forgotPasswordUseCase.execute(email: email);
   }
+
+  // ---------------------------------------------------------------------------
+  // RESET PASSWORD
+  // ---------------------------------------------------------------------------
 
   Future<void> resetPassword({
     required String token,
