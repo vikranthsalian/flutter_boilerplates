@@ -179,6 +179,7 @@ import '../../../../../core/utils/validators/validator_extensions.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../data/datasources/login_remote_datasource.dart';
 import '../../data/repositories/login_repository_impl.dart';
+import '../../../../../core/auth/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -192,24 +193,18 @@ class _LoginPageState extends State<LoginPage> {
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
 
-  late final LoginUseCase _loginUseCase;
+   final AuthService _authService = AuthService(); // Singleton instance
 
-  @override
-  void initState() {
-    super.initState();
-
-    _loginUseCase = LoginUseCase(
-      LoginRepositoryImpl(
-        LoginRemoteDatasource(DioClient()),
-      ),
-    );
-  }
+    @override
+    void initState() {
+      super.initState();
+    }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
     try {
-      await _loginUseCase.execute(
+      await _authService.login(
         email: _emailCtrl.text.trim(),
         password: _passwordCtrl.text,
       );
