@@ -154,6 +154,7 @@ import '../../../../../core/utils/validators/validator_extensions.dart';
 import '../../domain/usecases/reset_password_usecase.dart';
 import '../../data/datasources/reset_password_remote_datasource.dart';
 import '../../data/repositories/reset_password_repository_impl.dart';
+import '../../../../../core/auth/auth_service.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   final String token;
@@ -167,24 +168,20 @@ class ResetPasswordPage extends StatefulWidget {
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final _passwordCtrl = TextEditingController();
-
+  final AuthService _authService = AuthService(); // Singleton instance
   late final ResetPasswordUseCase _useCase;
 
   @override
   void initState() {
     super.initState();
-    _useCase = ResetPasswordUseCase(
-      ResetPasswordRepositoryImpl(
-        ResetPasswordRemoteDatasource(DioClient()),
-      ),
-    );
+
   }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
     try {
-      await _useCase.execute(
+      await _authService.resetPassword(
         token: widget.token,
         password: _passwordCtrl.text,
       );

@@ -141,6 +141,7 @@ import '../../../../../core/utils/validators/validator_extensions.dart';
 import '../../domain/usecases/forgot_password_usecase.dart';
 import '../../data/datasources/forgot_password_remote_datasource.dart';
 import '../../data/repositories/forgot_password_repository_impl.dart';
+import '../../../../../core/auth/auth_service.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -152,24 +153,20 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
-
+  final AuthService _authService = AuthService(); // Singleton instance
   late final ForgotPasswordUseCase _useCase;
 
   @override
   void initState() {
     super.initState();
-    _useCase = ForgotPasswordUseCase(
-      ForgotPasswordRepositoryImpl(
-        ForgotPasswordRemoteDatasource(DioClient()),
-      ),
-    );
+
   }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
     try {
-      await _useCase.execute(email: _emailCtrl.text.trim());
+      await _authService.forgotPassword(email: _emailCtrl.text.trim());
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(

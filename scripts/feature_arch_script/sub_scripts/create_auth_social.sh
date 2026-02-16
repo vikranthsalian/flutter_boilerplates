@@ -193,6 +193,7 @@ import '../../../../../core/utils/logging/logger.dart';
 import '../../domain/usecases/social_auth_usecase.dart';
 import '../../data/datasources/social_auth_remote_datasource.dart';
 import '../../data/repositories/social_auth_repository_impl.dart';
+import '../../../../../core/auth/auth_service.dart';
 
 class SocialAuthPage extends StatefulWidget {
   const SocialAuthPage({super.key});
@@ -203,15 +204,11 @@ class SocialAuthPage extends StatefulWidget {
 
 class _SocialAuthPageState extends State<SocialAuthPage> {
   late final SocialAuthUseCase _useCase;
-
+   final AuthService _authService = AuthService(); // Singleton instance
   @override
   void initState() {
     super.initState();
-    _useCase = SocialAuthUseCase(
-      SocialAuthRepositoryImpl(
-        SocialAuthRemoteDatasource(DioClient()),
-      ),
-    );
+
   }
 
   Future<void> _login(String provider) async {
@@ -219,7 +216,7 @@ class _SocialAuthPageState extends State<SocialAuthPage> {
       // TODO: Replace with real provider SDK token
       const providerToken = 'provider_access_token';
 
-      final isNewUser = await _useCase.execute(
+      final isNewUser = await _authService.socialLogin(
         provider: provider,
         providerAccessToken: providerToken,
       );
