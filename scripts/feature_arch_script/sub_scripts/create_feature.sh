@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Auth Feature Generator (Clean Architecture)"
+echo "Feature Generator (Clean Architecture)"
 echo "---------------------------------------------"
 
 read -p "👉 Enter feature path (relative to $BASE_DIR/features/, e.g. auth/signup): " FEATURE_PATH

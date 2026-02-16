@@ -183,7 +183,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     try {
       await _authService.resetPassword(
         token: widget.token,
-        password: _passwordCtrl.text,
+        newPassword: _passwordCtrl.text,
       );
 
       if (!mounted) return;
