@@ -46,9 +46,17 @@ class AuthService {
   late final ForgotPasswordUseCase _forgotPasswordUseCase;
   late final ResetPasswordUseCase _resetPasswordUseCase;
 
-  AuthService() {
-    _init();
-  }
+   // ---------------------------------------------------------------------------
+   // Singleton Setup
+   // ---------------------------------------------------------------------------
+
+   static final AuthService _instance = AuthService._internal();
+
+   factory AuthService() => _instance;
+
+   AuthService._internal() {
+     _init();
+   }
 
   void _init() {
     final dio = DioClient();
