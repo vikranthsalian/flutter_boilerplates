@@ -38,7 +38,7 @@ set BASE_URL=https://raw.githubusercontent.com/vikranthsalian/flutter_boilerplat
 :: ----------------------------------------------------
 :: Run All Scripts
 :: ----------------------------------------------------
-call :run_script create_theme.bat
+call :run_script create_constant.bat
 
 echo.
 echo 🎉 Folder structure created successfully!
