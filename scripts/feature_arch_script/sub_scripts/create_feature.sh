@@ -105,7 +105,7 @@ EOF
 ###############################################################################
 cat << EOF > $BASE_DIR/domain/usecases/${FEATURE_NAME}_usecase.dart
 import '../../../../../core/utils/firebase/analytics_service.dart';
-import '../../../../../core/core/network/tokens/token_manager.dart';
+import '../../../../../core/network/tokens/token_manager.dart';
 import '../repositories/${FEATURE_NAME}_repository.dart';
 
 class ${CLASS_NAME}UseCase {
@@ -117,7 +117,7 @@ class ${CLASS_NAME}UseCase {
     required String entityVariable
   }) async {
     final result = await repository.execute(
-      key: entityVariable,
+      entityVariable: entityVariable,
     );
 
     await TokenManager.saveTokens(
@@ -157,7 +157,7 @@ EOF
 # DATA – Remote Datasource
 ###############################################################################
 cat << EOF > $BASE_DIR/data/datasources/${FEATURE_NAME}_remote_datasource.dart
-import '../../../../../core/core/network/dio_client.dart';
+import '../../../../../core/network/dio_client.dart';
 import '../models/${FEATURE_NAME}_response_model.dart';
 
 class ${CLASS_NAME}RemoteDatasource {
@@ -203,11 +203,11 @@ class ${CLASS_NAME}RepositoryImpl implements ${CLASS_NAME}Repository {
     required String entityVariable,
   }) async {
     final result = await remote.execute(
-      key: entityVariable,
+      datasourceVariable: entityVariable,
     );
 
     return ${CLASS_NAME}Entity(
-      accessToken: result.entityVariable,
+      entityVariable: result.entityVariable,
     );
   }
 }
