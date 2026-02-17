@@ -43,6 +43,7 @@ Never commit sensitive environment variables: .env
 ```bash
 /bin/bash /Users/vikranthsalian/StudioProjects/flutter_boilerplates/scripts/feature_arch_script/__master.sh
 
+All the boilerplate codes will created in a while.
 
 # 🏗 Creating a Feature (Interactive Mode)
 
