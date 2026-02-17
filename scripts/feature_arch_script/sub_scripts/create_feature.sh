@@ -104,8 +104,6 @@ EOF
 # DOMAIN – UseCase
 ###############################################################################
 cat << EOF > $BASE_DIR/domain/usecases/${FEATURE_NAME}_usecase.dart
-import '../../../../../core/utils/firebase/analytics_service.dart';
-import '../../../../../core/network/tokens/token_manager.dart';
 import '../repositories/${FEATURE_NAME}_repository.dart';
 
 class ${CLASS_NAME}UseCase {
@@ -120,16 +118,6 @@ class ${CLASS_NAME}UseCase {
       entityVariable: entityVariable,
     );
 
-    await TokenManager.saveTokens(
-      result.entityVariable
-    );
-
-    AnalyticsService.logEvent(
-      '${FEATURE_NAME}_success',
-      parameters: {
-        'key': entityVariable,
-      },
-    );
   }
 }
 EOF
@@ -207,7 +195,7 @@ class ${CLASS_NAME}RepositoryImpl implements ${CLASS_NAME}Repository {
     );
 
     return ${CLASS_NAME}Entity(
-      entityVariable: result.entityVariable,
+      entityVariable: result.modelVariable,
     );
   }
 }
@@ -222,6 +210,7 @@ import '../../../../../core/utils/logging/logger.dart';
 import '../../domain/usecases/${FEATURE_NAME}_usecase.dart';
 import '../../data/datasources/${FEATURE_NAME}_remote_datasource.dart';
 import '../../data/repositories/${FEATURE_NAME}_repository_impl.dart';
+import '../../../../../core/network/dio_client.dart';
 
 class ${CLASS_NAME}Page extends StatefulWidget {
   const ${CLASS_NAME}Page({super.key});
