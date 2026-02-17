@@ -39,11 +39,16 @@ BASE_DIR=lib
 🔐 Add to .gitignore
 Never commit sensitive environment variables: .env
 
+(MAC) Run this command in your terminal : 
+```bash
+/bin/bash /Users/vikranthsalian/StudioProjects/flutter_boilerplates/scripts/feature_arch_script/__master.sh
+
+
 # 🏗 Creating a Feature (Interactive Mode)
 
 To generate a new feature, run:
 
-📌 FEATURE BASED ARCHITECTURE: 
+📌 (MAC) FEATURE BASED ARCHITECTURE: 
 ```bash
 /bin/bash /Users/vikranthsalian/StudioProjects/flutter_boilerplates/scripts/feature_arch_script/sub_scripts/create_feature.sh
 
