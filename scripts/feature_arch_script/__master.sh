@@ -28,7 +28,7 @@ run_script () {
 
 
 echo "▶️ Running Feature architecture setup..."
-#bash create_pubsec.sh
+
 
 run_script create_constants.sh
 run_script create_dio.sh

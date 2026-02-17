@@ -1,7 +1,33 @@
 #!/bin/bash
 set -e
 
-echo "Feature Generator (Clean Architecture)"
+
+PROJECT_ROOT="$(pwd)"
+echo PROJECT_ROOT
+ENV_FILE="$PROJECT_ROOT/.env"
+# Paths
+export $(grep -v '^#' $ENV_FILE | xargs)
+
+if [ -f "$ENV_FILE" ]; then
+  echo "📦 Loading .env from project root"
+  set -a
+  source "$ENV_FILE"
+  set +a
+else
+  echo "ℹ️ No .env found in project root, continuing..."
+fi
+
+
+BASE_URL="https://raw.githubusercontent.com/vikranthsalian/flutter_boilerplates/main/scripts/feature_arch_script/sub_scripts"
+
+run_script () {
+  local name="$1"
+  echo "▶️ Running $name"
+  curl -fsSL "$BASE_URL/$name" | bash
+}
+
+
+echo "Feature Generator (Feature Based Architecture)"
 echo "---------------------------------------------"
 
 read -p "👉 Enter feature path (relative to $BASE_DIR/features/, e.g. auth/signup): " FEATURE_PATH
