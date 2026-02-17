@@ -249,4 +249,4 @@ class _${CLASS_NAME}PageState extends State<${CLASS_NAME}Page> {
 EOF
 
 echo ""
-echo "✅ Auth feature '$FEATURE_NAME' created successfully at $BASE_DIR"
+echo "✅ Feature '$FEATURE_NAME' created successfully at $BASE_DIR"
