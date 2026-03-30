@@ -485,6 +485,15 @@ class ApiResult<T> {
   factory ApiResult.failure(String message) => ApiResult._(error: message);
 
   bool get isSuccess => error == null;
+
+  R fold<R>({
+    required R Function(T data) onSuccess,
+    required R Function(String error) onFailure,
+  }) {
+    return data != null
+        ? onSuccess(data as T)
+        : onFailure(error ?? "Unknown error");
+  }
 }
 EOF
 
